@@ -1,0 +1,26 @@
+table.grid {
+	border-width: 4px;
+	border-spacing:;
+	border-style: outset;
+	border-color: blue;
+	border-collapse: separate;
+	background-color: white;
+}
+
+table.grid th {
+	border-width: 3px;
+	padding: 1px;
+	border-style: inset;
+	border-color: green;
+	background-color: white;
+	-moz-border-radius:;
+}
+
+table.grid td {
+	border-width: 1.5px;
+	padding: 1px;
+	border-style: inset;
+	border-color: orange;
+	background-color: white;
+	-moz-border-radius:;
+}
