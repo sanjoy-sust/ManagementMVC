@@ -10,7 +10,7 @@ body {
 #header {
 	color: white;
 	background-color: #488214;
-	height: 300px;
+	height: 100px;
 }
 
 #headerTitle {
@@ -28,6 +28,7 @@ body {
 	border-right: 1px solid rgb(153, 153, 153);
 	background-color: rgb(206, 243, 164);
 	padding: 2mm 2mm 2mm 2mm;
+	height: 800px;
 }
 
 #menu div {
