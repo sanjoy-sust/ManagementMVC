@@ -5,7 +5,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
@@ -32,49 +35,66 @@ public class UserController extends MultiActionController {
 					password);
 			ModelAndView ret = new ModelAndView();
 			if (newUser.getName() == null) {
-				ret = new ModelAndView("employee");
+				ret = new ModelAndView("user");
 				ret.addObject("message", "User " + userStr);
 			} else {
 				ret = new ModelAndView("index");
-//				ret = new ModelAndView("userList");
-//				ret.addObject("user", user);
-//				ret.addObject("userList", userDAO.listUser());
+				// ret = new ModelAndView("userList");
+				// ret.addObject("user", user);
+				// ret.addObject("userList", userDAO.listUser());
 			}
 			return ret;
 		}
 	}
 
 	@RequestMapping("/register.html")
-	public ModelAndView register(HttpServletRequest request,
+	public String register(HttpServletRequest request,
 			HttpServletResponse response, User user) {
-		ModelAndView ret = new ModelAndView("register");
-
-		return ret;
+		ModelAndView ret = new ModelAndView();
+		ret.addObject("user", user);
+		ret.addObject("message", "you are success");
+		return "register";
 	}
 
-	@RequestMapping("/registerSave.html")
-	public ModelAndView registerSave(HttpServletRequest request,
-			HttpServletResponse response, User user) {
+	// @RequestMapping("/registerSave.html")
+	// public ModelAndView registerSave(HttpServletRequest request,
+	// HttpServletResponse response, User user) {
+	// userDAO.saveUser(user);
+	// User u = new User();
+	// ModelAndView ret = new ModelAndView("userList");
+	// ret.addObject("user", user);
+	// ret.addObject("userList", userDAO.listUser());
+	// return ret;
+	// }
+
+	@RequestMapping(value = "/registerSave.html", method = RequestMethod.POST)
+	public @ResponseBody
+	User registerSave(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = new User();
+		String fullName = request.getParameter("fullName");
+		String userName = request.getParameter("username");
+		String password = request.getParameter("password");
+
+		user.setFullName(fullName);
+		user.setName(userName);
+		user.setPassword(password);
 		userDAO.saveUser(user);
-		User u = new User();
-		ModelAndView ret = new ModelAndView("userList");
-		ret.addObject("user", user);
-		ret.addObject("userList", userDAO.listUser());
-		return ret;
+		return user;
 	}
 
 	@RequestMapping("/add.html")
 	public ModelAndView add(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		System.out.println("Calling Add Employee...");
-		return new ModelAndView("employee", "message", "Employee Added");
+		System.out.println("Calling Add user...");
+		return new ModelAndView("user", "message", "user Added");
 
 	}
 
 	@RequestMapping("/delete.html")
 	public ModelAndView delete(HttpServletRequest request,
 			HttpServletResponse response, User user) throws Exception {
-		System.out.println("Calling Delete Employee...");
+		System.out.println("Calling Delete user...");
 		userDAO.delete(user);
 		ModelAndView ret = new ModelAndView("userList");
 		ret.addObject("user", user);
@@ -100,7 +120,7 @@ public class UserController extends MultiActionController {
 
 	@RequestMapping("/userList.html")
 	public ModelAndView userList(HttpServletRequest request,
-			HttpServletResponse response,User user) {
+			HttpServletResponse response, User user) {
 		ModelAndView ret = new ModelAndView("userList");
 		ret.addObject("user", user);
 		ret.addObject("userList", userDAO.listUser());
