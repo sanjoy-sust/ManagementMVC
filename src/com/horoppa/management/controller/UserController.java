@@ -48,12 +48,13 @@ public class UserController extends MultiActionController {
 	}
 
 	@RequestMapping("/register.html")
-	public String register(HttpServletRequest request,
+	public ModelAndView register(HttpServletRequest request,
 			HttpServletResponse response, User user) {
-		ModelAndView ret = new ModelAndView();
+		ModelAndView ret = new ModelAndView("register");
 		ret.addObject("user", user);
 		ret.addObject("message", "you are success");
-		return "register";
+		ret.addObject("userList", userDAO.listUser());
+		return ret;
 	}
 
 	// @RequestMapping("/registerSave.html")
@@ -69,18 +70,12 @@ public class UserController extends MultiActionController {
 
 	@RequestMapping(value = "/registerSave.html", method = RequestMethod.POST)
 	public @ResponseBody
-	User registerSave(HttpServletRequest request, HttpServletResponse response)
+	String registerSave(HttpServletRequest request, User user,HttpServletResponse response)
 			throws Exception {
-		User user = new User();
-		String fullName = request.getParameter("fullName");
-		String userName = request.getParameter("username");
-		String password = request.getParameter("password");
-
-		user.setFullName(fullName);
-		user.setName(userName);
-		user.setPassword(password);
+		ModelAndView ret = new ModelAndView("register");
 		userDAO.saveUser(user);
-		return user;
+		ret.addObject("userList", userDAO.listUser());
+		return user.getFullName();
 	}
 
 	@RequestMapping("/add.html")
